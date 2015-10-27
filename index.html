@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+#container{
+width:100%;
+height:100%;
+}
+
+
+
+
+
+</style>
+</head>
+
+<body>
+
+<div id="container">
+
+<br>The data should be below<br>
+
+<ol id="datalist">
+
+</ol>
+
+</div>
+
+
+<script>
+
+load('data.js', function(xhr) {
+  //  document.getElementById('container').innerHTML = xhr.responseText;
+	var myList=document.getElementById('datalist');
+	
+	var obj=JSON.parse(xhr.responseText);
+	for(i=0; i < obj.length; i++){ 
+		var entry = document.createElement('li');
+		entry.appendChild(document.createTextNode(obj[i].color+"------"+obj[i].value));
+	
+		myList.appendChild(entry);
+}
+	
+});
+
+function load(url, callback) {
+        var xhr;
+         
+        if(typeof XMLHttpRequest !== 'undefined') xhr = new XMLHttpRequest();
+        else {
+            var versions = ["MSXML2.XmlHttp.5.0", 
+                            "MSXML2.XmlHttp.4.0",
+                            "MSXML2.XmlHttp.3.0", 
+                            "MSXML2.XmlHttp.2.0",
+                            "Microsoft.XmlHttp"]
+ 
+             for(var i = 0, len = versions.length; i < len; i++) {
+                try {
+                    xhr = new ActiveXObject(versions[i]);
+                    break;
+                }
+                catch(e){}
+             } // end for
+        }
+		
+		 xhr.onreadystatechange = ensureReadiness;
+         
+        function ensureReadiness() {
+            if(xhr.readyState < 4) {
+                return;
+            }
+             
+            if(xhr.status !== 200) {
+                return;
+            }
+ 
+            
+            if(xhr.readyState === 4) {
+                callback(xhr);
+            }           
+        }
+         
+        xhr.open('GET', url, true);
+        xhr.send('');
+    }
+
+</script>
+
+
+</body>
+</html>
